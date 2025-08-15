@@ -10,18 +10,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_location( 'footer' ) ) {
-	if ( hello_elementor_display_header_footer() ) {
-		if ( did_action( 'elementor/loaded' ) && hello_header_footer_experiment_active() ) {
-			get_template_part( 'template-parts/dynamic-footer' );
-		} else {
-			get_template_part( 'template-parts/footer' );
-		}
-	}
-}
+$footer_nav_menu = wp_nav_menu( [
+	'theme_location' => 'menu-2',
+	'fallback_cb' => false,
+	'container' => false,
+	'echo' => false,
+] );
 ?>
-
-<?php wp_footer(); ?>
+<footer id="site-footer" class="site-footer">
+	<?php if ( $footer_nav_menu ) : ?>
+		<nav class="site-navigation" aria-label="<?php echo esc_attr__( 'Footer menu', 'hello-elementor' ); ?>">
+			<?php
+			// PHPCS - escaped by WordPress with "wp_nav_menu"
+			echo $footer_nav_menu; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			?>
+		</nav>
+	<?php endif; ?>
+</footer>
 
 </body>
 </html>

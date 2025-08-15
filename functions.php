@@ -112,19 +112,6 @@ function hello_maybe_update_theme_version_in_db() {
 	}
 }
 
-if ( ! function_exists( 'hello_elementor_display_header_footer' ) ) {
-	/**
-	 * Check whether to display header footer.
-	 *
-	 * @return bool
-	 */
-	function hello_elementor_display_header_footer() {
-		$hello_elementor_header_footer = true;
-
-		return apply_filters( 'hello_elementor_header_footer', $hello_elementor_header_footer );
-	}
-}
-
 if ( ! function_exists( 'hello_elementor_scripts_styles' ) ) {
 	/**
 	 * Theme Scripts & Styles.
@@ -150,14 +137,12 @@ if ( ! function_exists( 'hello_elementor_scripts_styles' ) ) {
 			);
 		}
 
-		if ( hello_elementor_display_header_footer() ) {
-			wp_enqueue_style(
-				'hello-elementor-header-footer',
-				HELLO_THEME_STYLE_URL . 'header-footer.css',
-				[],
-				HELLO_ELEMENTOR_VERSION
-			);
-		}
+		wp_enqueue_style(
+			'hello-elementor-header-footer',
+			HELLO_THEME_STYLE_URL . 'header-footer.css',
+			[],
+			HELLO_ELEMENTOR_VERSION
+		);
 	}
 }
 add_action( 'wp_enqueue_scripts', 'hello_elementor_scripts_styles' );
@@ -189,73 +174,6 @@ if ( ! function_exists( 'hello_elementor_content_width' ) ) {
 	}
 }
 add_action( 'after_setup_theme', 'hello_elementor_content_width', 0 );
-
-if ( ! function_exists( 'hello_elementor_add_description_meta_tag' ) ) {
-	/**
-	 * Add description meta tag with excerpt text.
-	 *
-	 * @return void
-	 */
-	function hello_elementor_add_description_meta_tag() {
-		if ( ! apply_filters( 'hello_elementor_description_meta_tag', true ) ) {
-			return;
-		}
-
-		if ( ! is_singular() ) {
-			return;
-		}
-
-		$post = get_queried_object();
-		if ( empty( $post->post_excerpt ) ) {
-			return;
-		}
-
-		echo '<meta name="description" content="' . esc_attr( wp_strip_all_tags( $post->post_excerpt ) ) . '">' . "\n";
-	}
-}
-add_action( 'wp_head', 'hello_elementor_add_description_meta_tag' );
-
-// Settings page
-require get_template_directory() . '/includes/settings-functions.php';
-
-// Header & footer styling option, inside Elementor
-require get_template_directory() . '/includes/elementor-functions.php';
-
-if ( ! function_exists( 'hello_elementor_customizer' ) ) {
-	// Customizer controls
-	function hello_elementor_customizer() {
-		if ( ! is_customize_preview() ) {
-			return;
-		}
-
-		if ( ! hello_elementor_display_header_footer() ) {
-			return;
-		}
-
-		require get_template_directory() . '/includes/customizer-functions.php';
-	}
-}
-add_action( 'init', 'hello_elementor_customizer' );
-
-if ( ! function_exists( 'hello_elementor_check_hide_title' ) ) {
-	/**
-	 * Check whether to display the page title.
-	 *
-	 * @param bool $val default value.
-	 *
-	 * @return bool
-	 */
-	function hello_elementor_check_hide_title( $val ) {
-		if ( defined( 'ELEMENTOR_VERSION' ) ) {
-			$current_doc = Elementor\Plugin::instance()->documents->get( get_the_ID() );
-			if ( $current_doc && 'yes' === $current_doc->get_settings( 'hide_title' ) ) {
-				$val = false;
-			}
-		}
-		return $val;
-	}
-}
-add_filter( 'hello_elementor_page_title', 'hello_elementor_check_hide_title' );
 
 /**
  * BC:
