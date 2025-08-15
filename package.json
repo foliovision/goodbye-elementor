@@ -1,7 +1,7 @@
 {
-    "name": "hello-elementor",
-    "slug": "elementor-hello-theme",
-    "homepage": "https://elementor.com/",
+    "name": "goodbye-elementor",
+    "slug": "goodbye-elementor",
+    "homepage": "https://foliovision.com/",
     "description": "A sample theme for Elementor.",
     "version": "3.4.4",
     "last_beta_version": "2.4.0-beta3",
